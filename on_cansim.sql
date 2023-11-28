@@ -1,23 +1,14 @@
-
+select [REF_DATE], [Gross withdrawals], [Marketable production]
+from
+(
 SELECT 
 [REF_DATE],
-[GEO],
-[DGUID],
 [Supply and disposition],
-[Unit of measure],
-[UOM],
-[UOM_ID],
-[SCALAR_FACTOR],
-[SCALAR_ID],
-[VECTOR],
-[COORDINATE],
-[VALUE],
-[STATUS],
-[SYMBOL],
-[TERMINATED],
-[DECIMALS]
+[VALUE]
 FROM [EnergyData].[dbo].[CANSIM_25100055_SupplyAndDisposition_Gas]
-
-where [GEO] = 'Ontario' and [Supply and disposition] = 'Marketable production'
-
-order by [REF_DATE] desc
+where [GEO] = 'Ontario' and [Supply and disposition] in ('Marketable production', 'Gross withdrawals') and [Unit of measure] = 'Cubic metres'
+) as SourceTable
+PIVOT
+(
+max([VALUE]) for [Supply and disposition] in ([Gross withdrawals], [Marketable production])
+) as PivotTable

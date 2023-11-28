@@ -1,9 +1,6 @@
-/****** Script for SelectTopNRows command from SSMS  ******/
-SELECT TOP (1000) [Date]
-      ,[Month]
-      ,[Year]
-      ,[Value]
-      ,[Product]
-      ,[Units]
-  FROM [EnergyData].[dbo].[NB_Production]
-  order by [Date] desc
+SELECT 
+[Date],
+[Value] as [Raw Gas (103m3)],
+[Value] as [Marketable Gas (103m3)]
+FROM [EnergyData].[dbo].[NB_Production]
+where [Product] = 'Natural Gas' and Units = 'thousand m3'

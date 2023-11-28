@@ -1,34 +1,35 @@
-select [Date], Units, [Well Production], [In Situ Well Production], [Flare], [Fuel], [Vent], [Shrinkage], [Acid Gas Injection], [Gas Injection]
+select [Date], 
+([Well Production] + [In Situ Well Production]) - ([Flare]+[Fuel]+[Vent]+[Shrinkage]+[Acid Gas Injection]+[Gas Injection]) as [Marketable Gas (103m3)]
 from
 (
 
 SELECT 
-[Category],[Value],[Units],[Date]
+[Category],[Value],[Date]
 FROM [EnergyData].[dbo].[AER_ST3]
 where Product = 'Gas' and [Type]  = 'Production' and Category = 'Well Production'
 
 union all
 
 SELECT 
-[Category],[Value],[Units],[Date]
+[Category],[Value],[Date]
 FROM [EnergyData].[dbo].[AER_ST3]
 where Product = 'Gas' and [Type]  = 'Production' and Category = 'In Situ Well Production'
 
 union all
 
 SELECT 
-[Category],[Value],[Units],[Date]
+[Category],[Value],[Date]
 FROM [EnergyData].[dbo].[AER_ST3]
 where Product = 'Gas' and [Type]  = 'Field Gas Use' and Category in ('Flare', 'Fuel', 'Vent', 'Shrinkage') 
 
 union all
 
 SELECT 
-[Category],[Value],[Units],[Date]
+[Category],[Value],[Date]
 FROM [EnergyData].[dbo].[AER_ST3]
 where Product = 'Gas' and [Type]  = 'Injection  (Enhanced Recovery)' and Category in ('Acid Gas Injection', 'Gas Injection')
 ) as SourceTable
 PIVOT
 (
-MAX(Value) FOR Category IN ([Well Production], [In Situ Well Production], [Flare], [Fuel], [Vent], [Shrinkage], [Acid Gas Injection], [Gas Injection])
+MAX([Value]) FOR Category IN ([Well Production], [In Situ Well Production], [Flare], [Fuel], [Vent], [Shrinkage], [Acid Gas Injection], [Gas Injection])
 ) as PivotTable
