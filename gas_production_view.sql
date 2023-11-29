@@ -1,5 +1,8 @@
---create view vwMarketableGasProduction as
---drop view vwMarketableGasProduction
+USE EnergyData
+GO
+
+CREATE OR ALTER VIEW dbo.vwMarketableGasProduction
+AS
 
 with ab_cte as (
 	select [Date], 
